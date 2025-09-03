@@ -29,26 +29,43 @@ jobs:
         run: web-ext lint
 
       - name: Build extension
-        run: web-ext build --overwrite-dest
-
-      - name: Prepare Firefox artifact
-        if: matrix.browser == 'firefox'
-        run: mv web-ext-artifacts/*.zip web-ext-artifacts/vt-keyboard-extension.xpi
-
-      - name: Prepare Chromium artifact
-        if: matrix.browser == 'chromium'
-        run: mv web-ext-artifacts/*.zip web-ext-artifacts/vt-keyboard-extension.zip
+        run: |
+          mkdir -p artifacts
+          if [ "${{ matrix.browser }}" = "firefox" ]; then
+            # Firefox: Build V2 only
+            cp manifest-v2.json manifest.json
+            web-ext build --overwrite-dest
+            mv web-ext-artifacts/*.zip artifacts/vt-keyboard-extension.xpi
+            cp manifest-v3.json manifest.json
+          else
+            # Chromium: Build both V2 and V3
+            # Build V3 first
+            web-ext build --overwrite-dest
+            mv web-ext-artifacts/*.zip artifacts/vt-keyboard-extension-v3.zip
+            # Build V2
+            cp manifest-v2.json manifest.json
+            web-ext build --overwrite-dest
+            mv web-ext-artifacts/*.zip artifacts/vt-keyboard-extension-v2.zip
+            cp manifest-v3.json manifest.json
+          fi
 
       - name: Upload Firefox artifact
         if: matrix.browser == 'firefox'
         uses: actions/upload-artifact@v4
         with:
           name: vt-keyboard-extension-firefox
-          path: web-ext-artifacts/vt-keyboard-extension.xpi
+          path: artifacts/vt-keyboard-extension.xpi
 
-      - name: Upload Chromium artifact
+      - name: Upload Chromium V3 artifact
         if: matrix.browser == 'chromium'
         uses: actions/upload-artifact@v4
         with:
-          name: vt-keyboard-extension-chromium
-          path: web-ext-artifacts/vt-keyboard-extension.zip
+          name: vt-keyboard-extension-chromium-v3
+          path: artifacts/vt-keyboard-extension-v3.zip
+
+      - name: Upload Chromium V2 artifact
+        if: matrix.browser == 'chromium'
+        uses: actions/upload-artifact@v4
+        with:
+          name: vt-keyboard-extension-chromium-v2
+          path: artifacts/vt-keyboard-extension-v2.zip

@@ -34,8 +34,15 @@ A browser extension that modifies the behavior of the Enter key on virtual keybo
 ### From Built Artifacts
 
 Download the latest release artifacts:
-- Firefox: `vt-keyboard-extension.xpi`
-- Chromium: `vt-keyboard-extension.zip` (load as unpacked)
+
+**Firefox:**
+- `vt-keyboard-extension-firefox.xpi` (Manifest V2)
+
+**Chromium (Chrome/Edge):**
+- `vt-keyboard-extension-chromium-v3.zip` (Manifest V3, recommended)
+- `vt-keyboard-extension-chromium-v2.zip` (Manifest V2, legacy support)
+
+*Load ZIP files as unpacked extensions in Chrome/Edge developer mode*
 
 ## Usage
 
@@ -90,17 +97,24 @@ The extension comes pre-configured with these domains:
 
 ## Technical Details
 
-- **Manifest Version**: 3 (MV3)
+- **Manifest Versions**: 2 and 3 (MV2/MV3)
 - **Permissions**: `storage`, `activeTab`, `scripting`, `declarativeContent`
 - **Content Script**: Dynamically injected on whitelisted domains
 - **Storage**: Uses `chrome.storage.sync` for cross-device synchronization
+- **Background**: Service worker (MV3) or event page (MV2)
 
 ## Browser Compatibility
 
-- **Firefox**: 109.0+
-- **Chrome**: 88+
-- **Edge**: 88+
-- **Other Chromium browsers**: Supported
+**Optimized Build Strategy:**
+- **Firefox**: Uses Manifest V2 for maximum compatibility (48.0+)
+- **Chromium Browsers** (Chrome, Edge): Uses Manifest V3 for modern features (88+)
+- **Other Chromium browsers**: Supported via V3 build
+
+**Full Compatibility Matrix:**
+- **Firefox**: 48.0+ (V2 build)
+- **Chrome**: 88+ (V3 build)
+- **Edge**: 88+ (V3 build)
+- **Legacy browsers**: Use V2 build with appropriate modifications
 
 ## Contributing
 
