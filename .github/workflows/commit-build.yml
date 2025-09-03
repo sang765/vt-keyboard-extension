@@ -1,0 +1,54 @@
+name: Build and Test Extension
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        browser: [chromium, firefox]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install web-ext
+        run: npm install -g web-ext
+
+      - name: Lint for Firefox
+        if: matrix.browser == 'firefox'
+        run: web-ext lint
+
+      - name: Build extension
+        run: web-ext build --overwrite-dest
+
+      - name: Prepare Firefox artifact
+        if: matrix.browser == 'firefox'
+        run: mv web-ext-artifacts/*.zip web-ext-artifacts/vt-keyboard-extension.xpi
+
+      - name: Prepare Chromium artifact
+        if: matrix.browser == 'chromium'
+        run: mv web-ext-artifacts/*.zip web-ext-artifacts/vt-keyboard-extension.zip
+
+      - name: Upload Firefox artifact
+        if: matrix.browser == 'firefox'
+        uses: actions/upload-artifact@v4
+        with:
+          name: vt-keyboard-extension-firefox
+          path: web-ext-artifacts/vt-keyboard-extension.xpi
+
+      - name: Upload Chromium artifact
+        if: matrix.browser == 'chromium'
+        uses: actions/upload-artifact@v4
+        with:
+          name: vt-keyboard-extension-chromium
+          path: web-ext-artifacts/vt-keyboard-extension.zip

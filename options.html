@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VT Keyboard Extension Options</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 20px;
+    }
+    h1 {
+      color: #333;
+    }
+    .add-domain {
+      margin-bottom: 20px;
+    }
+    input[type="text"] {
+      padding: 8px;
+      width: 300px;
+      margin-right: 10px;
+    }
+    button {
+      padding: 8px 16px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .remove-btn {
+      background-color: #dc3545;
+    }
+    .remove-btn:hover {
+      background-color: #c82333;
+    }
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid #eee;
+    }
+  </style>
+</head>
+<body>
+  <h1>VT Keyboard Extension Options</h1>
+  <p>Manage the whitelist of domains where the Enter key will create new lines instead of submitting forms.</p>
+
+  <div class="add-domain">
+    <input type="text" id="newDomain" placeholder="Enter domain (e.g., example.com)">
+    <button id="addBtn">Add Domain</button>
+  </div>
+
+  <h2>Whitelisted Domains</h2>
+  <ul id="domainList"></ul>
+
+  <script src="options.js"></script>
+</body>
+</html>
