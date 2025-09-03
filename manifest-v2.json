@@ -14,7 +14,8 @@
     {
       "matches": ["http://*/*", "https://*/*"],
       "js": ["src/content-script.js"],
-      "run_at": "document_end"
+      "run_at": "document_start",
+      "all_frames": false
     }
   ],
   "background": {

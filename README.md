@@ -1,12 +1,12 @@
 # VT Keyboard Extension
 
-A browser extension that modifies the behavior of the Enter key on virtual keyboards to create new lines instead of submitting forms, with support for both Chromium-based browsers (Chrome, Edge) and Firefox.
+A browser extension that modifies the behavior of the Enter key on virtual keyboards to create new lines instead of submitting forms. Works on ALL websites with support for both Chromium-based browsers (Chrome, Edge) and Firefox.
 
 ## Features
 
 - **Smart Enter Key Handling**: Converts Enter key presses to new line insertions in text areas and input fields
 - **Advanced Virtual Keyboard Support**: Comprehensive handling for mobile virtual keyboards (GBoard, SwiftKey, etc.) with multiple fallback strategies
-- **Whitelist Management**: Only activates on user-specified websites for better control
+- **Universal Support**: Works on all websites without restrictions
 - **Search Field Exclusion**: Automatically skips search inputs to maintain expected behavior
 - **Cross-Browser Support**: Works on both Chromium and Firefox browsers
 - **Persistent Settings**: Whitelist stored using browser sync storage
@@ -82,19 +82,7 @@ The project includes GitHub Actions workflow that automatically builds artifacts
 
 ## Configuration
 
-### Default Whitelist
-
-The extension comes pre-configured with these domains:
-- `docs.google.com`
-- `notion.so`
-- `etherpad.net`
-
-### Adding Custom Domains
-
-1. Click the extension icon
-2. Enter a domain (e.g., `example.com`)
-3. Click "Add Domain"
-4. The whitelist is automatically synced across your browser instances
+The extension works automatically on all websites without any configuration required. Simply install and use - it will modify Enter key behavior in all text areas and input fields (excluding search fields).
 
 ## Technical Details
 

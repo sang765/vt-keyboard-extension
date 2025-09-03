@@ -1,12 +1,6 @@
 // Content Script for VT Keyboard Extension
 // Enhanced virtual keyboard support with multiple fallback strategies
-
-// Default whitelist for V2 (when dynamic injection isn't available)
-const DEFAULT_WHITELIST = ['docs.google.com', 'notion.so', 'etherpad.net'];
-
-function isDomainWhitelisted(domain) {
-    return DEFAULT_WHITELIST.some(whitelisted => domain.includes(whitelisted));
-}
+// Works on all websites
 
 // Detect if we're on a mobile device with virtual keyboard
 function isMobileDevice() {
@@ -125,45 +119,42 @@ function handleDocumentKeydown(event) {
     }
 }
 
-// Check if we should activate on this page
-const currentDomain = window.location.hostname;
-if (isDomainWhitelisted(currentDomain)) {
-    // Global document handlers for virtual keyboards
-    document.addEventListener('keydown', handleDocumentKeydown, true);
-    document.addEventListener('touchend', handleTouchEnd, true);
+// Activate on all websites - no whitelist restriction
+// Global document handlers for virtual keyboards
+document.addEventListener('keydown', handleDocumentKeydown, true);
+document.addEventListener('touchend', handleTouchEnd, true);
 
-    // Element-specific handlers
-    document.addEventListener('focusin', (event) => {
-        const target = event.target;
-        const tagName = target.tagName.toLowerCase();
-        const type = target.type?.toLowerCase();
+// Element-specific handlers
+document.addEventListener('focusin', (event) => {
+    const target = event.target;
+    const tagName = target.tagName.toLowerCase();
+    const type = target.type?.toLowerCase();
 
-        const isTextarea = tagName === 'textarea';
-        const isTextInput = tagName === 'input' && (type === 'text' || type === 'email' || type === 'password' || type === 'url');
-        const isSearch = type === 'search' || target.role === 'search' || (target.ariaLabel && target.ariaLabel.toLowerCase().includes('search'));
+    const isTextarea = tagName === 'textarea';
+    const isTextInput = tagName === 'input' && (type === 'text' || type === 'email' || type === 'password' || type === 'url');
+    const isSearch = type === 'search' || target.role === 'search' || (target.ariaLabel && target.ariaLabel.toLowerCase().includes('search'));
 
-        if ((isTextarea || isTextInput) && !isSearch) {
-            // Remove existing listeners
-            target.removeEventListener('keydown', handleEnterKey);
-            target.removeEventListener('keypress', handleEnterKey);
-            target.removeEventListener('beforeinput', handleBeforeInput);
-            target.removeEventListener('compositionend', handleCompositionEnd);
+    if ((isTextarea || isTextInput) && !isSearch) {
+        // Remove existing listeners
+        target.removeEventListener('keydown', handleEnterKey);
+        target.removeEventListener('keypress', handleEnterKey);
+        target.removeEventListener('beforeinput', handleBeforeInput);
+        target.removeEventListener('compositionend', handleCompositionEnd);
 
-            // Add comprehensive event listeners
-            target.addEventListener('keydown', handleEnterKey, true);
-            target.addEventListener('keypress', handleEnterKey, true);
-            target.addEventListener('beforeinput', handleBeforeInput, true);
-            target.addEventListener('compositionend', handleCompositionEnd, true);
+        // Add comprehensive event listeners
+        target.addEventListener('keydown', handleEnterKey, true);
+        target.addEventListener('keypress', handleEnterKey, true);
+        target.addEventListener('beforeinput', handleBeforeInput, true);
+        target.addEventListener('compositionend', handleCompositionEnd, true);
 
-            // Cleanup function
-            target._cleanupHandler = () => {
-                target.removeEventListener('keydown', handleEnterKey, true);
-                target.removeEventListener('keypress', handleEnterKey, true);
-                target.removeEventListener('beforeinput', handleBeforeInput, true);
-                target.removeEventListener('compositionend', handleCompositionEnd, true);
-            };
+        // Cleanup function
+        target._cleanupHandler = () => {
+            target.removeEventListener('keydown', handleEnterKey, true);
+            target.removeEventListener('keypress', handleEnterKey, true);
+            target.removeEventListener('beforeinput', handleBeforeInput, true);
+            target.removeEventListener('compositionend', handleCompositionEnd, true);
+        };
 
-            target.addEventListener('focusout', target._cleanupHandler);
-        }
-    }, true);
-}
+        target.addEventListener('focusout', target._cleanupHandler);
+    }
+}, true);
