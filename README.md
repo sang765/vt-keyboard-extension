@@ -98,10 +98,12 @@ The extension comes pre-configured with these domains:
 ## Technical Details
 
 - **Manifest Versions**: 2 and 3 (MV2/MV3)
-- **Permissions**: `storage`, `activeTab`, `scripting`, `declarativeContent`
-- **Content Script**: Dynamically injected on whitelisted domains
+- **Permissions**: `storage`, `activeTab`, `scripting` (V3), `tabs` (V2)
+- **Content Scripts**:
+  - **V3**: Dynamically injected on whitelisted domains only
+  - **V2**: Statically declared, with whitelist checking inside script
 - **Storage**: Uses `chrome.storage.sync` for cross-device synchronization
-- **Background**: Service worker (MV3) or event page (MV2)
+- **Background**: Service worker (V3) or persistent background page (V2)
 
 ## Browser Compatibility
 

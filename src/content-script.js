@@ -1,6 +1,14 @@
 // Content Script for VT Keyboard Extension
 // Modifies Enter key behavior in text inputs on whitelisted sites
 
+// Default whitelist for V2 (when dynamic injection isn't available)
+const DEFAULT_WHITELIST = ['docs.google.com', 'notion.so', 'etherpad.net'];
+
+function isDomainWhitelisted(domain) {
+    // Check if current domain is in whitelist
+    return DEFAULT_WHITELIST.some(whitelisted => domain.includes(whitelisted));
+}
+
 function handleEnterKey(event) {
     if (event.key === 'Enter' && !event.shiftKey) {
         event.preventDefault();
@@ -16,20 +24,24 @@ function handleEnterKey(event) {
     }
 }
 
-document.addEventListener('focusin', (event) => {
-    const target = event.target;
-    const tagName = target.tagName.toLowerCase();
-    const type = target.type?.toLowerCase();
+// Check if we should activate on this page
+const currentDomain = window.location.hostname;
+if (isDomainWhitelisted(currentDomain)) {
+    document.addEventListener('focusin', (event) => {
+        const target = event.target;
+        const tagName = target.tagName.toLowerCase();
+        const type = target.type?.toLowerCase();
 
-    // Check if it's a valid target (textarea, text input) and NOT a search field
-    const isTextarea = tagName === 'textarea';
-    const isTextInput = tagName === 'input' && (type === 'text' || type === 'email' || type === 'password' || type === 'url');
-    const isSearch = type === 'search' || target.role === 'search' || (target.ariaLabel && target.ariaLabel.toLowerCase().includes('search'));
+        // Check if it's a valid target (textarea, text input) and NOT a search field
+        const isTextarea = tagName === 'textarea';
+        const isTextInput = tagName === 'input' && (type === 'text' || type === 'email' || type === 'password' || type === 'url');
+        const isSearch = type === 'search' || target.role === 'search' || (target.ariaLabel && target.ariaLabel.toLowerCase().includes('search'));
 
-    if ((isTextarea || isTextInput) && !isSearch) {
-        target.addEventListener('keydown', handleEnterKey);
-        // Add event listener to remove the keydown listener on focusout to avoid memory leaks
-        target._cleanupHandler = () => target.removeEventListener('keydown', handleEnterKey);
-        target.addEventListener('focusout', target._cleanupHandler);
-    }
-}, true); // Use capture phase to catch events early
+        if ((isTextarea || isTextInput) && !isSearch) {
+            target.addEventListener('keydown', handleEnterKey);
+            // Add event listener to remove the keydown listener on focusout to avoid memory leaks
+            target._cleanupHandler = () => target.removeEventListener('keydown', handleEnterKey);
+            target.addEventListener('focusout', target._cleanupHandler);
+        }
+    }, true); // Use capture phase to catch events early
+}
