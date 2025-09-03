@@ -5,7 +5,7 @@ A browser extension that modifies the behavior of the Enter key on virtual keybo
 ## Features
 
 - **Smart Enter Key Handling**: Converts Enter key presses to new line insertions in text areas and input fields
-- **Virtual Keyboard Support**: Enhanced support for mobile virtual keyboards (GBoard, etc.)
+- **Advanced Virtual Keyboard Support**: Comprehensive handling for mobile virtual keyboards (GBoard, SwiftKey, etc.) with multiple fallback strategies
 - **Whitelist Management**: Only activates on user-specified websites for better control
 - **Search Field Exclusion**: Automatically skips search inputs to maintain expected behavior
 - **Cross-Browser Support**: Works on both Chromium and Firefox browsers
