@@ -24,12 +24,12 @@ A browser extension that modifies the behavior of the Enter key on virtual keybo
 2. **For Firefox:**
    - Open Firefox and go to `about:debugging`
    - Click "This Firefox" → "Load Temporary Add-on"
-   - Select the `manifest.json` file from the project directory
+   - Select the `manifest.json` file from the project root
 
 3. **For Chromium (Chrome/Edge):**
    - Open Chrome/Edge and go to `chrome://extensions/`
    - Enable "Developer mode" in the top right
-   - Click "Load unpacked" and select the project directory
+   - Click "Load unpacked" and select the project root directory
 
 ### From Built Artifacts
 

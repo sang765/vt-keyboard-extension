@@ -36,7 +36,7 @@ function injectContentScript(tabId, url) {
   if (whitelist.some(w => domain.endsWith(w))) {
     chrome.scripting.executeScript({
       target: { tabId: tabId },
-      files: ['content-script.js']
+      files: ['src/content-script.js']
     });
   }
 }
