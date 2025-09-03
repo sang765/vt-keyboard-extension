@@ -10,6 +10,13 @@ function isMobileDevice() {
 
 // Insert newline using multiple methods for maximum compatibility
 function insertNewline(target) {
+    // Prevent multiple insertions within 100ms
+    const now = Date.now();
+    if (target._lastInsertion && now - target._lastInsertion < 100) {
+        return;
+    }
+    target._lastInsertion = now;
+
     const start = target.selectionStart;
     const end = target.selectionEnd;
     const originalValue = target.value;
@@ -17,31 +24,14 @@ function insertNewline(target) {
     // Method 1: Direct value manipulation
     target.value = originalValue.substring(0, start) + '\n' + originalValue.substring(end);
 
-    // Method 2: Try execCommand for older browsers
-    try {
-        const selection = window.getSelection();
-        const range = document.createRange();
-        range.setStart(target, start);
-        range.setEnd(target, start);
-        selection.removeAllRanges();
-        selection.addRange(range);
-
-        document.execCommand('insertText', false, '\n');
-    } catch (e) {
-        // execCommand failed, use direct method
-    }
-
     // Ensure cursor position is correct
     setTimeout(() => {
         target.selectionStart = target.selectionEnd = start + 1;
         target.focus();
 
-        // Trigger multiple events to ensure the application notices
-        const events = ['input', 'change', 'keyup', 'keydown'];
-        events.forEach(eventType => {
-            const event = new Event(eventType, { bubbles: true });
-            target.dispatchEvent(event);
-        });
+        // Trigger input event to notify the application
+        const inputEvent = new Event('input', { bubbles: true });
+        target.dispatchEvent(inputEvent);
     }, 0);
 }
 
@@ -55,16 +45,11 @@ function handleEnterKey(event) {
 
         const target = event.target;
 
-        // For mobile/virtual keyboards, use different timing strategies
+        // Single insertion with slight delay for virtual keyboards
         if (isMobileDevice()) {
-            // Immediate insertion for virtual keyboards
-            insertNewline(target);
-            // Additional delayed insertion as fallback
-            setTimeout(() => insertNewline(target), 10);
-            setTimeout(() => insertNewline(target), 50);
-        } else {
-            // Standard insertion for physical keyboards
             setTimeout(() => insertNewline(target), 0);
+        } else {
+            insertNewline(target);
         }
 
         return false;
@@ -102,26 +87,8 @@ function handleTouchEnd(event) {
     }
 }
 
-// Global document-level handlers for virtual keyboards
-function handleDocumentKeydown(event) {
-    const target = event.target;
-    const tagName = target.tagName?.toLowerCase();
-    const type = target.type?.toLowerCase();
-
-    const isValidTarget = tagName === 'textarea' ||
-                         (tagName === 'input' && (type === 'text' || type === 'email' || type === 'password' || type === 'url'));
-
-    if (isValidTarget) {
-        const isEnterKey = event.key === 'Enter' || event.keyCode === 13 || event.which === 13;
-        if (isEnterKey && !event.shiftKey) {
-            handleEnterKey(event);
-        }
-    }
-}
-
 // Activate on all websites - no whitelist restriction
-// Global document handlers for virtual keyboards
-document.addEventListener('keydown', handleDocumentKeydown, true);
+// Touch event handler for virtual keyboards
 document.addEventListener('touchend', handleTouchEnd, true);
 
 // Element-specific handlers
