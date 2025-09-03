@@ -13,6 +13,7 @@ build-artifacts/
 *.pem
 *.key
 *.crt
+key.pem
 
 # OS generated files
 .DS_Store
