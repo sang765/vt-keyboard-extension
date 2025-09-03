@@ -45,13 +45,13 @@ Download the latest release artifacts:
 
 *Load ZIP files as unpacked extensions in Chrome/Edge developer mode*
 
-## Usage
+## Usage (Extension page not working now)
 
-1. After installation, the extension icon will appear in your browser toolbar
+~~1. After installation, the extension icon will appear in your browser toolbar
 2. Click the extension icon to access settings
 3. Add domains to the whitelist (e.g., `docs.google.com`, `notion.so`)
 4. On whitelisted sites, pressing Enter in text areas will create new lines instead of submitting forms
-5. The extension automatically excludes search fields
+5. The extension automatically excludes search fields~~
 
 ## Building
 
