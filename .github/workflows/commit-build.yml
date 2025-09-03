@@ -24,10 +24,6 @@ jobs:
       - name: Install web-ext
         run: npm install -g web-ext
 
-      - name: Install crx3 for Chromium
-        if: matrix.browser == 'chromium'
-        run: npm install -g crx3
-
       - name: Lint for Firefox
         if: matrix.browser == 'firefox'
         run: web-ext lint
@@ -39,15 +35,9 @@ jobs:
         if: matrix.browser == 'firefox'
         run: mv web-ext-artifacts/*.zip web-ext-artifacts/vt-keyboard-extension.xpi
 
-      - name: Generate private key for Chromium
+      - name: Prepare Chromium artifact
         if: matrix.browser == 'chromium'
-        run: openssl genrsa -out key.pem 2048
-
-      - name: Build CRX for Chromium
-        if: matrix.browser == 'chromium'
-        run: |
-          mkdir -p build-artifacts
-          crx3 --pack-extension=. --key=key.pem --output=build-artifacts/vt-keyboard-extension.crx
+        run: mv web-ext-artifacts/*.zip web-ext-artifacts/vt-keyboard-extension.zip
 
       - name: Upload Firefox artifact
         if: matrix.browser == 'firefox'
@@ -61,4 +51,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: vt-keyboard-extension-chromium
-          path: build-artifacts/vt-keyboard-extension.crx
+          path: web-ext-artifacts/vt-keyboard-extension.zip
