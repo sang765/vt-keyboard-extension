@@ -1,27 +1,19 @@
-# Release Notes Template
-
-## Version [VERSION_NUMBER]
-
-### What's New
-- [List new features or changes here]
-
-### Bug Fixes
-- [List bug fixes here]
-
-### Installation Instructions
-1. Download the appropriate extension file from the assets below:
-   - For Firefox: `vt-keyboard-extension.xpi`
-   - For Chromium V3: `vt-keyboard-extension-v3.zip`
-   - For Chromium V2: `vt-keyboard-extension-v2.zip`
-2. Install the extension in your browser:
-   - Firefox: Open Firefox, go to `about:addons`, click the gear icon, select "Install Add-on From File", and choose the .xpi file.
-   - Chromium: Open Chrome/Edge, go to `chrome://extensions/`, enable "Developer mode", click "Load unpacked", and select the extracted zip folder.
-
-### Known Issues
-- [List any known issues or limitations]
-
-### Contributing
-If you find any issues or have suggestions, please open an issue on GitHub.
-
----
-*This release was automatically generated.*
+release_template:
+  name: "Release Notes Template"
+  version: "[VERSION_NUMBER]"
+  whats_new:
+    - "[List new features or changes here]"
+  bug_fixes:
+    - "[List bug fixes here]"
+  installation_instructions: |
+    1. Download the appropriate extension file from the assets below:
+       - For Firefox: `vt-keyboard-extension.xpi`
+       - For Chromium V3: `vt-keyboard-extension-v3.zip`
+       - For Chromium V2: `vt-keyboard-extension-v2.zip`
+    2. Install the extension in your browser:
+       - Firefox: Open Firefox, go to `about:addons`, click the gear icon, select "Install Add-on From File", and choose the .xpi file.
+       - Chromium: Open Chrome/Edge, go to `chrome://extensions/`, enable "Developer mode", click "Load unpacked", and select the extracted zip folder.
+  known_issues:
+    - "[List any known issues or limitations]"
+  contributing: "If you find any issues or have suggestions, please open an issue on GitHub."
+  footer: "*This release was automatically generated.*"
